@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>🎤 Presenter Notes — SimasiaAI</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #07070d;
+    color: #f0ede8;
+    font-family: Georgia, 'Times New Roman', serif;
+    padding: 0;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  #header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #07070d;
+    border-bottom: 2px solid #e8a838;
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+  }
+  #slide-display {
+    font-size: 22px;
+    font-weight: 700;
+    color: #e8a838;
+    letter-spacing: 0.06em;
+    font-family: Georgia, serif;
+  }
+  #slide-title {
+    font-size: 14px;
+    color: #888;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .brand { font-size: 12px; color: #444; }
+  #progress-bar {
+    height: 3px;
+    background: rgba(232,168,56,0.15);
+    position: fixed;
+    top: 57px; left: 0; right: 0;
+    z-index: 100;
+  }
+  #progress-fill {
+    height: 3px;
+    background: #e8a838;
+    transition: width 0.4s ease;
+    width: 8.33%;
+  }
+
+  /* MAIN NOTES AREA */
+  #main {
+    padding: 90px 40px 120px;
+    max-width: 860px;
+    margin: 0 auto;
+  }
+
+  .notes-text {
+    font-size: 26px;
+    line-height: 1.9;
+    color: #e8e4df;
+    min-height: 200px;
+    transition: opacity 0.25s;
+  }
+
+  /* NAVIGATION */
+  #nav-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #0d0d18;
+    border-top: 1px solid rgba(232,168,56,0.25);
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .nav-btn {
+    background: rgba(232,168,56,0.1);
+    border: 1px solid rgba(232,168,56,0.3);
+    color: #e8a838;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 10px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: Georgia, serif;
+    transition: background 0.2s;
+  }
+  .nav-btn:hover { background: rgba(232,168,56,0.2); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .counter {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    letter-spacing: 0.08em;
+  }
+  .hint {
+    font-size: 11px;
+    color: #444;
+  }
+
+  /* ALL SLIDES LIST (scrollable backup) */
+  #all-slides { display: none; }
+
+  /* Sync indicator */
+  #sync-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #4ade80;
+    display: inline-block;
+    margin-right: 6px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+  .sync-label { font-size: 11px; color: #4ade80; }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div>
+    <div id="slide-display">SLIDE 1 / 12</div>
+    <div id="slide-title">Cover</div>
+  </div>
+  <div style="display:flex; align-items:center; gap:10px;">
+    <span id="sync-dot"></span>
+    <span class="sync-label">Synced with presentation</span>
+    <span class="brand" style="margin-left:16px;">SimasiaAI · Private Presenter View</span>
+  </div>
+</div>
+<div id="progress-bar"><div id="progress-fill"></div></div>
+
+<div id="main">
+  <div class="notes-text" id="notes-text">Loading…</div>
+</div>
+
+<div id="nav-bar">
+  <button class="nav-btn" id="prev-btn" onclick="go(-1)" disabled>← Prev</button>
+  <span class="counter" id="counter">Navigate with ← → arrow keys</span>
+  <button class="nav-btn" id="next-btn" onclick="go(1)">Next →</button>
+  <span class="hint">Auto-syncs with main window</span>
+</div>
+
+<script>
+const slides = [
+  {
+    title: "Cover",
+    notes: "Good afternoon. My name is Dimitris Papadakis. I am the Head of Sales and Co-founder of SimasiaAI. We are a Greek AI company, and we have built something I believe will become the standard infrastructure for care across Southern Europe. The name of our product is Fλow. And our philosophy is three words: The Human Standard. Let's begin."
+  },
+  {
+    title: "The Problem",
+    notes: "I want you to imagine a parent. Their child has just been diagnosed with cancer. It is two in the morning. They call a clinic — no answer. They go online — they find fifty contradictory articles. They are completely alone. Now imagine the NGO that is supposed to support this family. Their team is buried in spreadsheets. They are missing calls. They are writing the same email for the hundredth time. That is the problem we are solving. Sixty percent of Greek private clinics have no digital management system. Over twelve hundred NGOs in Greece and Cyprus have zero AI infrastructure. And not a single existing solution in this market is EU AI Act compliant. That gap is our opportunity."
+  },
+  {
+    title: "The Solution — Fλow",
+    notes: "Fλow is not software. Fλow is the feeling of an organisation running without friction. No call is missed. No beneficiary is left without an answer at two in the morning. No doctor wastes two hours typing notes instead of looking at the patient in front of them. We merge a conversational AI frontend — PyxidaAI or DialogosAI — with our operational backend, PraxisAI. Everything flows into the Fλow Pulse Dashboard — a living intelligence layer that turns every interaction into actionable data. And we do not build it for you. We build it with you. Because you are the domain expert. We are the technology architects."
+  },
+  {
+    title: "Market Opportunity",
+    notes: "The total addressable market for Health AI and NGO digital transformation in Europe is 8.4 billion euros, growing at 37% annually. Our serviceable market — Greece, Cyprus, and the Balkans — is 420 million euros. Our realistic three-year target: 4.2 million euros from 150 clients. But here is the timing catalyst nobody is talking about. The EU AI Act enforcement begins now. Every healthcare organisation in Europe needs compliance. We are the only player in this market that is pre-built compliant from day one. That regulation is not a barrier for us. It is our moat."
+  },
+  {
+    title: "Business Model & Pricing",
+    notes: "We operate on a CAPEX plus OPEX model. The CAPEX is a one-time Done-For-You implementation fee — we handle everything: data migration, training, integration. The OPEX is a monthly recurring fee covering hosting, AI fuel, and maintenance. We require fifty percent upfront at contract signature — this protects our cash flow and signals serious client commitment. The Grand Slam Offer philosophy: our clients feel they are buying a hundred-thousand-euro ecosystem for ten thousand euros — because the value of zero missed appointments and full EU AI Act compliance far exceeds what we charge."
+  },
+  {
+    title: "Unique Selling Points",
+    notes: "Six reasons why Fλow is irreplaceable. First: we are the only EU AI Act native health AI in Southern Europe — built compliant from day one. Second: our co-creation model means clients are co-authors of the system. They do not switch, because they helped design it. Third: the Fλow Pulse Dashboard turns daily AI conversations into grant-ready impact reports at the click of a button. Fourth: our team includes professors of computational linguistics — academic credibility in regulated healthcare environments is everything. Fifth: Done-For-You — zero effort, zero risk for the client. And sixth: multilingual by design — every deployment speaks every European language natively."
+  },
+  {
+    title: "Competitive Landscape",
+    notes: "We respect our competitors. DocPlanner focuses on appointment booking — no AI intelligence, no NGO use case, and no EU AI Act compliance. Tidio and Intercom are generic chatbot platforms — not healthcare specific, not compliant, not co-created. Microsoft Nuance is enterprise-grade at enterprise prices — completely inaccessible to our target market. We sit at a unique intersection: affordable, compliant, co-designed, and built specifically for Southern Europe. Nobody else is here. That is the competitive gap, and we are filling it now."
+  },
+  {
+    title: "Traction & Validation",
+    notes: "We generated fifteen thousand euros in revenue. With zero paid marketing. Zero. I want that to land. We deployed a live conversational AI at the Chios Business Forum CHOICES — six hundred participants, live, on stage. We have active co-creation pilots with Kapa3, the Centre for Cancer Patient Guidance, with BPAN Heroes, and with MS Hellas, the Panhellenic Federation for Multiple Sclerosis. CCI Europe — the Pan-European childhood cancer federation — has confirmed a meeting with our team. This is product-market fit before the raise. This machine is already running."
+  },
+  {
+    title: "The Team",
+    notes: "Ladies and gentlemen, we are four co-founders, each a domain expert, and together we form what I believe is the strongest interdisciplinary team for this specific problem in Southern Europe. Stergios — our CEO — is a Professor of Computational Linguistics at the University of Crete. He is the scientific foundation on which every AI model we build rests. Giannis — our CTO — is a PhD candidate in Computer Science in San Francisco, specialising in privacy systems, data security, and reliable software infrastructure. Anastasia — our CCO — is an Associate Professor and she leads all our communications and institutional partnerships. And I am Dimitris — Head of Sales — a Computational Linguist with an MA. Military discipline. Zero marketing budget. Fifteen thousand euros in revenue. We have gaps — and we know exactly which roles to fill with this investment."
+  },
+  {
+    title: "Roadmap & Go-To-Market",
+    notes: "Our roadmap is tight and credible. We are not dreaming — we are executing. We have already passed foundation and brand launch. We are now in our validation sprint: five Core Fλow clients, MRR building, and our first EU federation deal in motion. By end of 2026: fifteen clients, one hundred thousand euros in CAPEX revenue, and an SDR hired. By 2027: our first Pan-European federation clients and five hundred thousand euros in ARR. By 2028: four-point-two million euros and one hundred and fifty clients across Southern Europe. The go-to-market engine is daily outbound, partnership channels, and grant consulting — where we write the EU funding applications that embed Fλow as the funded deliverable."
+  },
+  {
+    title: "Financials & The Ask",
+    notes: "We are raising one million euros. At a two million euro pre-money valuation. That gives investors a thirty-three percent equity stake at a three million euro post-money. This is an honest, defensible number for a company at our stage — real product, real revenue, real partners. Not inflated. Not speculative. The capital: thirty-five percent into product and engineering, thirty percent into sales and go-to-market, twenty percent into operations and legal compliance, fifteen percent as runway reserve. Eighteen months to Series A. Five-year projection: from fifteen thousand today to four-point-two million in annual recurring revenue by 2028."
+  },
+  {
+    title: "Thank You — Close",
+    notes: "Thank you. I want to leave you with one thought. The most powerful AI is the kind that disappears — and lets humans be human. We are building the infrastructure for care. The digital backbone that allows doctors to be doctors. That allows NGOs to be advocates. If you believe that technology should serve humanity — not the other way around — then SimasiaAI is your investment. We would love to invite you to co-create the future of responsible AI with us. Μέτρο μας, ο άνθρωπος. The Human Standard."
+  }
+];
+
+let current = 0;
+
+function render(n) {
+  current = Math.max(0, Math.min(n, slides.length - 1));
+  const s = slides[current];
+  document.getElementById('notes-text').style.opacity = '0';
+  setTimeout(() => {
+    document.getElementById('notes-text').textContent = s.notes;
+    document.getElementById('notes-text').style.opacity = '1';
+  }, 120);
+  document.getElementById('slide-display').textContent = `SLIDE ${current+1} / ${slides.length}`;
+  document.getElementById('slide-title').textContent = s.title;
+  document.getElementById('counter').textContent = `Slide ${current+1} of ${slides.length}`;
+  document.getElementById('prev-btn').disabled = current === 0;
+  document.getElementById('next-btn').disabled = current === slides.length - 1;
+  document.getElementById('progress-fill').style.width = ((current+1)/slides.length*100) + '%';
+}
+
+function go(dir) { render(current + dir); }
+
+// ── BroadcastChannel sync (auto-follows main window) ──────────────────────
+let bc;
+try {
+  bc = new BroadcastChannel('simasia_presenter');
+  bc.onmessage = (e) => {
+    if (typeof e.data.n === 'number') render(e.data.n);
+  };
+} catch(err) {
+  document.getElementById('sync-dot').style.background = '#f87171';
+}
+
+// ── Keyboard navigation ───────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault(); go(1);
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault(); go(-1);
+  }
+});
+
+// Init
+render(0);
+</script>
+</body>
+</html>
